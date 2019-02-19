@@ -4,25 +4,28 @@
 import requests
 from bs4 import BeautifulSoup
 
-#page = requests.get("http://beijing.chineseoffice.com.cn/Template/office_complete.html")
-for i in range(10):
-    base_link = "http://beijing.chineseoffice.com.cn/Building/GetbuildingList?page=" + str(i)
-    page = requests.get("http://beijing.chineseoffice.com.cn/Building/GetbuildingList")
-    detail_page_link = "http://beijing.chineseoffice.com.cn/Template/office_details.html"
-    page_dic = str(page.content.decode())
-    #print(page.json())
-    for build in page.json():
-        print(build['id'], build['officeName'])
-        build_link = detail_page_link + "?id=" + build['id']
-        print(build_link)
+def getBuildsInfo():
+    url = "http://beijing.chineseoffice.com.cn/Building/GetbuildingList"
+    headers = {
+        'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36',
+        'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8',
+        'Accept':'application/json, text/javascript, */*; q=0.01'
+    }
+    for i in range(10):
+        data = "page=%s" % str(i)
+        listPage = requests.post(url,data=data)
+        page = requests.get("http://beijing.chineseoffice.com.cn/Building/GetbuildingList")
+        detail_page_link = "http://beijing.chineseoffice.com.cn/Template/office_details.html"
+        page_dic = str(listPage.content.decode())
+        #print(page.json())
+        for build in listPage.json():
+            print(build['id'], build['officeName'])
+            build_link = detail_page_link + "?id=" + build['id']
+            print(build_link)
+
+def saveToFile():
+    pass
 
 
-
-# print(page.status_code)
-# builds_doc = str(page.content,'utf-8')
-# #print(page_doc)
-# soup = BeautifulSoup(page_doc,"html.parser")
-# print(soup)
-# builds = soup.find_all(attrs={'class':'lone'})
-# for build in builds:
-#     print(build)
+def saveToXML():
+    pass
